@@ -12,8 +12,6 @@ source:
 build:
   number: 0
   skip: true  # [win]
-  # ignore_run_exports:
-  #   - libcxx
   script:
     - cp $RECIPE_DIR/CMakeLists.txt CMakeLists.txt
     - cmake -GNinja $CMAKE_ARGS -B build -S .
@@ -56,7 +54,7 @@ test:
     - ./test
 
 about:
-  home: https://fmv.jku.at/cadical/
+  home: https://fmv.jku.at/cadical
   license: MIT
   license_file: LICENSE
   summary: Clean and efficient state-of-the-art SAT solver
