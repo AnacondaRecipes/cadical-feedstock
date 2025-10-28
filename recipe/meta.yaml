@@ -1,0 +1,71 @@
+{% set name = "cadical" %}
+{% set version = "2.1.3" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/arminbiere/{{ name }}/archive/refs/tags/rel-{{ version }}.tar.gz
+  sha256: abfe890aa4ccda7b8449c7ad41acb113cfb8e7e8fbf5e49369075f9b00d70465
+
+build:
+  number: 0
+  skip: true  # [win]
+  script:
+    - cp $RECIPE_DIR/CMakeLists.txt CMakeLists.txt
+    - cmake -GNinja $CMAKE_ARGS -B build -S .
+    - cmake --build build --config Release
+    - cmake --install build --prefix $PREFIX
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - {{ stdlib('c') }}
+    - cmake
+    - ninja-base
+
+test:
+  files:
+    - simple.cnf
+    - test.cpp
+  requires:
+    - {{ compiler('cxx') }}
+  commands:
+    # Test version
+    - cadical --version
+    
+    # Test binary exists and package contents
+    - test -f $PREFIX/bin/cadical  # [unix]
+    - test -f $PREFIX/bin/mobical  # [unix]
+    - test -f $PREFIX/include/cadical.hpp  # [unix]
+    - test -f $PREFIX/include/ccadical.h  # [unix]
+    - test -f $PREFIX/include/ipasir.h  # [unix]
+    - test -f $PREFIX/lib/libcadical${SHLIB_EXT}  # [unix]
+    
+    # Test solving SAT problem
+    - cadical simple.cnf > output.txt || EXIT_CODE=$?
+    - test $EXIT_CODE -eq 20
+    - cat output.txt
+    - grep "s UNSATISFIABLE" output.txt
+    
+    # Test C++ library
+    - $CXX test.cpp $CXXFLAGS $LDFLAGS -I$PREFIX/include -lcadical -o test -std=c++11
+    - ./test
+
+about:
+  home: https://fmv.jku.at/cadical
+  license: MIT
+  license_file: LICENSE
+  summary: Clean and efficient state-of-the-art SAT solver
+  description: |
+    CaDiCaL is a simplified SAT solver written in C++. It is designed to be 
+    clean, efficient, and easy to use. The solver is highly competitive in 
+    international SAT competitions and provides both a library and a standalone 
+    binary for solving SAT problems.
+  dev_url: https://github.com/arminbiere/cadical
+  doc_url: https://github.com/arminbiere/cadical/blob/master/README.md
+
+extra:
+  recipe-maintainers:
+    - wolfv
