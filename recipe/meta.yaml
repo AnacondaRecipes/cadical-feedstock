@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/arminbiere/cadical/archive/refs/tags/rel-{{ version }}.tar.gz
+  url: https://github.com/arminbiere/{{ name }}/archive/refs/tags/rel-{{ version }}.tar.gz
   sha256: abfe890aa4ccda7b8449c7ad41acb113cfb8e7e8fbf5e49369075f9b00d70465
 
 build:
@@ -23,7 +23,7 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
     - cmake
-    - ninja
+    - ninja-base
 
 test:
   files:
