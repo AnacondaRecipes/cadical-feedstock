@@ -1,5 +1,5 @@
 {% set name = "cadical" %}
-{% set version = "2.1.3" %}
+{% set version = "3.0.0" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/arminbiere/{{ name }}/archive/refs/tags/rel-{{ version }}.tar.gz
-  sha256: abfe890aa4ccda7b8449c7ad41acb113cfb8e7e8fbf5e49369075f9b00d70465
+  sha256: 282b1c9422fde8631cb721b86450ae94df4e8de0545c17a69a301aaa4bf92fcf
 
 build:
   number: 0
@@ -34,7 +34,6 @@ test:
   commands:
     # Test version
     - cadical --version
-    
     # Test binary exists and package contents
     - test -f $PREFIX/bin/cadical  # [unix]
     - test -f $PREFIX/bin/mobical  # [unix]
@@ -42,13 +41,11 @@ test:
     - test -f $PREFIX/include/ccadical.h  # [unix]
     - test -f $PREFIX/include/ipasir.h  # [unix]
     - test -f $PREFIX/lib/libcadical${SHLIB_EXT}  # [unix]
-    
     # Test solving SAT problem
     - cadical simple.cnf > output.txt || EXIT_CODE=$?
     - test $EXIT_CODE -eq 20
     - cat output.txt
     - grep "s UNSATISFIABLE" output.txt
-    
     # Test C++ library
     - $CXX test.cpp $CXXFLAGS $LDFLAGS -I$PREFIX/include -lcadical -o test -std=c++11
     - ./test
@@ -59,9 +56,9 @@ about:
   license_file: LICENSE
   summary: Clean and efficient state-of-the-art SAT solver
   description: |
-    CaDiCaL is a simplified SAT solver written in C++. It is designed to be 
-    clean, efficient, and easy to use. The solver is highly competitive in 
-    international SAT competitions and provides both a library and a standalone 
+    CaDiCaL is a simplified SAT solver written in C++. It is designed to be
+    clean, efficient, and easy to use. The solver is highly competitive in
+    international SAT competitions and provides both a library and a standalone
     binary for solving SAT problems.
   dev_url: https://github.com/arminbiere/cadical
   doc_url: https://github.com/arminbiere/cadical/blob/master/README.md
