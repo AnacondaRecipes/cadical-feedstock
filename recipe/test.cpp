@@ -3,7 +3,9 @@
 
 int main() {
     CaDiCaL::Solver solver;
-    solver.add(1);
+    int var = solver.declare_one_more_variable();
+    assert(var == 1);
+    solver.add(var);
     solver.add(0);
     int res = solver.solve();
     assert(res == 10);
