@@ -54,6 +54,7 @@ test:
 about:
   home: https://fmv.jku.at/cadical
   license: MIT
+  license_family: MIT
   license_file: LICENSE
   summary: Clean and efficient state-of-the-art SAT solver
   description: |
